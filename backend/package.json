@@ -1,0 +1,27 @@
+{
+  "name": "ai-stock-analysis-backend",
+  "version": "1.0.0",
+  "description": "Node.js + Express Backend following MVC Architecture for AI-Based Stock Market Prediction and Investment Assistant",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "keywords": [
+    "express",
+    "mvc",
+    "stock-analysis",
+    "ai"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
