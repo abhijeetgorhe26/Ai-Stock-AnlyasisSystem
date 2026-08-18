@@ -1,8 +1,8 @@
 # AI-Based Stock Market Prediction and Investment Assistant
 
-This repository contains the initial local development setup for the **AI-Based Stock Market Prediction and Investment Assistant** system.
+This repository contains the local development setup for the **AI-Based Stock Market Prediction and Investment Assistant** system.
 
-The project is structured with a decoupled **Frontend** (React + Vite) and **Backend** (Node.js + Express) following the Model-View-Controller (MVC) architectural pattern.
+The project is structured with a decoupled **Frontend** (Next.js + TS + Tailwind), **Backend** (Node.js + Express + TS), and **AI** layer (Python + FastAPI) orchestrating around PostgreSQL and Redis.
 
 ---
 
@@ -10,112 +10,59 @@ The project is structured with a decoupled **Frontend** (React + Vite) and **Bac
 
 ```
 Ai-Stock-AnlyasisSystem/
-├── .gitignore               # Root gitignore
+├── docker-compose.yml       # Docker Compose configuration for all services
 ├── README.md                # Project documentation & setup instructions
-├── backend/                 # Express Node.js API server (MVC Flat Structure)
-│   ├── .env.example         # Template environment variables
-│   ├── .gitignore           # Backend gitignore
-│   ├── package.json         # Backend dependencies & scripts
-│   ├── server.js            # Server listener entry point
-│   ├── app.js               # Express app setup & middleware mount
-│   ├── config/              # Environment configuration loader
-│   ├── controllers/         # MVC Controllers (request & response logic)
-│   ├── middleware/          # Global middleware (e.g. error handling)
-│   ├── models/              # MVC Models (Data models & schemas placeholder)
-│   ├── routes/              # Express API route declarations
-│   ├── services/            # Service layer placeholder (business logic & external APIs)
-│   ├── utils/               # Shared utility helper functions
-│   └── views/               # MVC Views (view layer & payload formatters)
-└── frontend/                # React.js application (Vite toolchain)
-    ├── .env.example         # Template frontend environment variables
-    ├── .gitignore           # Frontend gitignore
-    ├── index.html           # HTML entry point
-    ├── package.json         # Frontend dependencies & scripts
-    ├── vite.config.js       # Vite configuration
-    └── src/
-        ├── App.jsx          # Root React component
-        ├── index.css        # Global CSS styling
-        ├── main.jsx         # React DOM root render
-        └── components/      # UI components placeholder
+├── frontend/                # Next.js web application (React, TypeScript, Tailwind)
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── src/                 # Next.js App Router and Components
+│   └── ...
+├── backend/                 # Node.js Express API (TypeScript)
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── src/                 # API Routes, Controllers, Models
+│   └── ...
+└── ai/                      # Python FastAPI (PyTorch, scikit-learn)
+    ├── Dockerfile
+    ├── requirements.txt
+    ├── main.py              # FastAPI entry point
+    └── ...
 ```
-
----
-
-## 📂 Folder Responsibilities
-
-### Backend (`backend/`)
-- **`controllers/`**: Handles incoming HTTP requests, invokes services/models, and returns HTTP responses.
-- **`models/`**: Defines data structures, schemas (e.g., MongoDB/Mongoose models), and database access logic.
-- **`views/`**: Decoupled view layer for custom response formatting, templates, or serialized payloads.
-- **`routes/`**: Express routes defining API endpoints and mapping them to corresponding controllers.
-- **`middleware/`**: Functions that execute during the request-response lifecycle (e.g. error handler, CORS).
-- **`services/`**: Holds core business logic, stock prediction algorithms, FinBERT sentiment services, and external API wrappers.
-- **`config/`**: Manages environment variables and application settings.
-- **`utils/`**: Reusable helper functions and utilities.
-- **`server.js` & `app.js`**: Application entry points and Express server initializers.
-
-### Frontend (`frontend/`)
-- **`src/components/`**: Modular, reusable React UI components.
-- **`src/App.jsx`**: Main application container component.
-- **`src/main.jsx`**: Entry point that mounts the React app onto the HTML DOM.
 
 ---
 
 ## 🛠️ Local Development Setup & How to Run
 
 ### Prerequisites
-- **Node.js**: `v18.x` or higher
-- **npm**: `v9.x` or higher
+- **Docker** and **Docker Compose**
 
----
+### 1. Running the Full Stack (Docker Compose)
 
-### 1. Running the Backend (Express Server)
-
-Navigate to the `backend` directory, install dependencies, and start the server:
+Navigate to the project root and start all services via Docker:
 
 ```bash
-cd backend
-npm install
-npm run dev
+docker compose up -d
 ```
 
-The backend server will start locally at **`http://localhost:5000`**.
+This will build and start 5 containers:
+1. `ai_stock_frontend` (Next.js) -> **`http://localhost:3000`**
+2. `ai_stock_backend` (Express) -> **`http://localhost:5000`**
+3. `ai_stock_ai` (FastAPI) -> **`http://localhost:8000`**
+4. `ai_stock_postgres` (PostgreSQL) -> Port **`5432`**
+5. `ai_stock_redis` (Redis) -> Port **`6379`**
 
-#### Health-Check Endpoint
-Verify that the backend server is running cleanly by accessing:
+### 2. Verify Services
+
+#### Backend Health-Check
 ```http
 GET http://localhost:5000/api/health
 ```
 
-Sample Response:
-```json
-{
-  "status": "success",
-  "message": "Backend server is running successfully",
-  "timestamp": "2026-08-09T22:00:00.000Z",
-  "uptime": 4.12
-}
+#### AI Health-Check
+```http
+GET http://localhost:8000/api/health
 ```
 
----
-
-### 2. Running the Frontend (React Application)
-
-Open a new terminal window, navigate to the `frontend` directory, install dependencies, and start the development server:
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-The Vite dev server will launch the React application at **`http://localhost:5173`**.
-
----
-
-## 🔐 Environment Configuration
-
-- **Backend**: Copy `backend/.env.example` to `backend/.env` if you need custom port or origin overrides.
-- **Frontend**: Copy `frontend/.env.example` to `frontend/.env` if you need custom API base URL overrides.
-
-*Note: No secret keys or real credentials should be placed in `.env.example`.*
+#### Frontend UI
+Visit [http://localhost:3000](http://localhost:3000) in your browser.
