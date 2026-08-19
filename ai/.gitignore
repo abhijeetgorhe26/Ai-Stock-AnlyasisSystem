@@ -1,0 +1,17 @@
+# Python Environments
+.venv/
+venv/
+ENV/
+
+# Python Bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment & Secrets
+.env
+.env.*
+
+# OS Files
+.DS_Store

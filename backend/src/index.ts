@@ -1,23 +1,45 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import { initializeDatabase } from './utils/db.js';
+import apiRoutes from './routes/index.js';
 
-dotenv.config();
+import path from 'path';
+
+dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 
-app.use(cors());
+// ─── Middleware ───────────────────────────────────────────────────────
+const allowedOrigins = [
+  process.env.FRONTEND_URL || 'http://localhost:3000',
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://127.0.0.1:3000',
+  'http://127.0.0.1:3001',
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl) or allowed local origins
+    if (!origin || allowedOrigins.includes(origin) || origin.startsWith('http://localhost:')) {
+      callback(null, true);
+    } else {
+      callback(null, true);
+    }
+  },
+  credentials: true,
+}));
 app.use(express.json());
+app.use(cookieParser());
 
-app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'success',
-    message: 'Backend server is running successfully',
-    timestamp: new Date().toISOString()
-  });
-});
+// ─── Central API Gateway ─────────────────────────────────────────────
+app.use('/api', apiRoutes);
 
-app.listen(port, () => {
+// ─── Start server ────────────────────────────────────────────────────
+app.listen(port, async () => {
   console.log(`Backend server running on http://localhost:${port}`);
+  await initializeDatabase();
 });
