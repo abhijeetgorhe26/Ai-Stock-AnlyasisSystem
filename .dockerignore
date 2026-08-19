@@ -1,0 +1,23 @@
+# Ignore node_modules & python environments
+**/node_modules
+**/.venv
+**/venv
+**/__pycache__
+
+# Ignore build outputs & cache
+**/.next
+**/dist
+**/build
+**/.git
+**/.gitignore
+
+# Ignore secrets & environment files (Docker compose injects env vars)
+**/.env
+**/.env.local
+**/.env*.local
+
+# Ignore logs & OS files
+**/*.log
+**/.DS_Store
+**/.vscode
+**/.idea

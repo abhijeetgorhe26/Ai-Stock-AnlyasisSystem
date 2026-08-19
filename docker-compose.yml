@@ -21,13 +21,15 @@ services:
       context: ./backend
     container_name: ai_stock_backend
     ports:
-      - "5000:5000"
+      - "5001:5001"
+    env_file:
+      - .env
     volumes:
       - ./backend:/app
       - /app/node_modules
     environment:
       - NODE_ENV=development
-      - PORT=5000
+      - PORT=5001
       - DB_HOST=postgres
       - DB_USER=postgres
       - DB_PASS=postgres
